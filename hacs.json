@@ -1,0 +1,6 @@
+{
+    "name": "Custom Cover Card",
+    "content_in_root": true,
+    "filename": "hass-cover-card.js",
+    "homeassistant": "0.110.0"
+}
