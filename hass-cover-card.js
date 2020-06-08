@@ -48,15 +48,15 @@ class CustomCoverCard extends HTMLElement {
           if (event.cancelable) {
             //Disable default drag event
             event.preventDefault();
-            
-            document.addEventListener('mousemove', mouseMove);
-            document.addEventListener('touchmove', mouseMove);
-            document.addEventListener('pointermove', mouseMove);
-      
-            document.addEventListener('mouseup', mouseUp);
-            document.addEventListener('touchend', mouseUp);
-            document.addEventListener('pointerup', mouseUp);
           }
+            
+          document.addEventListener('mousemove', mouseMove);
+          document.addEventListener('touchmove', mouseMove);
+          document.addEventListener('pointermove', mouseMove);
+      
+          document.addEventListener('mouseup', mouseUp);
+          document.addEventListener('touchend', mouseUp);
+          document.addEventListener('pointerup', mouseUp);
         };
   
         let mouseMove = function(event) {
