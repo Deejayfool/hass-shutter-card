@@ -6,7 +6,13 @@ class CustomCoverCard extends HTMLElement {
     //Init the card
     if (!this.card) {
       const card = document.createElement('ha-card');
-      card.header = 'Cover card';
+      
+      if (this.config.title) {
+          card.header = this.config.title;
+      } else {
+          card.header = 'Cover card';
+      }
+    
       this.card = card;
       this.appendChild(card);
     
@@ -129,7 +135,7 @@ class CustomCoverCard extends HTMLElement {
         .cc-covers { padding: 16px; }
           .cc-cover { display: flex; margin: 1rem 0; }
             .cc-cover-left { flex: 1; }
-              .cc-cover-label { font-size: 24px }
+              .cc-cover-label { font-size: 20px; }
               .cc-cover-buttons { text-align: center; margin-top: 2rem; }
             .cc-cover-right { flex: 1; }
               .cc-cover-selector-picture { position: relative; margin: auto; background-size: cover; min-height: 150px; max-height: 100%; width: 153px; }
@@ -204,6 +210,7 @@ class CustomCoverCard extends HTMLElement {
     if (!config.entities) {
       throw new Error('You need to define entities');
     }
+    
     this.config = config;
     this.maxPosition = 137;
     this.minPosition = 19;
