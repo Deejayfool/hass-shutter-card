@@ -137,7 +137,7 @@ class ShutterCard extends HTMLElement {
       
       const style = document.createElement('style');
       style.textContent = `
-        .cc-shutters { padding: 16px; }
+        .sc-shutters { padding: 16px; }
           .sc-shutter { display: flex; margin-top: 1rem; }
           .sc-shutter:first-child { margin-top: 0; }
             .sc-shutter-left { flex: 1; }

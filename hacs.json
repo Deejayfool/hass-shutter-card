@@ -1,6 +1,5 @@
 {
-    "name": "Custom Cover Card",
-    "filename": "hass-cover-card.js",
-    "homeassistant": "0.110.0",
+    "name": "Shutter Card",
+    "filename": "hass-shutter-card.js",
     "render_readme": true
 }
