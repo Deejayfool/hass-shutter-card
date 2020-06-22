@@ -9,8 +9,6 @@ class ShutterCard extends HTMLElement {
       
       if (this.config.title) {
           card.header = this.config.title;
-      } else {
-          card.header = 'Shutter card';
       }
     
       this.card = card;
