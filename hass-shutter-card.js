@@ -153,9 +153,9 @@ class ShutterCard extends HTMLElement {
       const style = document.createElement('style');
       style.textContent = `
         .sc-shutters { padding: 16px; }
-          .sc-shutter { margin-top: 1rem; }
+          .sc-shutter { margin-top: 1rem; overflow: hidden; }
           .sc-shutter:first-child { margin-top: 0; }
-          .sc-shutter-middle { display: flex; }
+          .sc-shutter-middle { display: flex; width: 210px; margin: auto; }
             .sc-shutter-buttons { flex: 1; text-align: center; margin-top: 0.4rem; }
             .sc-shutter-selector { flex: 1; }
               .sc-shutter-selector-picture { position: relative; margin: auto; background-size: cover; min-height: 150px; max-height: 100%; width: 153px; }
