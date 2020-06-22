@@ -78,6 +78,8 @@ class ShutterCard extends HTMLElement {
               event.preventDefault();
             }
             
+            _this.isUpdating = true;
+            
             document.addEventListener('mousemove', mouseMove);
             document.addEventListener('touchmove', mouseMove);
             document.addEventListener('pointermove', mouseMove);
@@ -93,6 +95,8 @@ class ShutterCard extends HTMLElement {
         };
            
         let mouseUp = function(event) {
+          _this.isUpdating = false;
+            
           let newPosition = event.pageY - _this.getPictureTop(picture);
           
           if (newPosition < _this.minPosition)
@@ -192,10 +196,13 @@ class ShutterCard extends HTMLElement {
       shutter.querySelectorAll('.sc-shutter-label').forEach(function(shutterLabel) {
           shutterLabel.innerHTML = friendlyName;
       })
-      shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
+      
+      if (!_this.isUpdating) {
+        shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
           shutterPosition.innerHTML = currentPosition + '%';
-      })
-      _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+        })
+        _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+      }
     });
   }
   
@@ -247,6 +254,7 @@ class ShutterCard extends HTMLElement {
     this.config = config;
     this.maxPosition = 137;
     this.minPosition = 19;
+    this.isUpdating = false;
   }
 
   // The height of your card. Home Assistant uses this to automatically
