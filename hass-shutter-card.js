@@ -31,6 +31,11 @@ class ShutterCard extends HTMLElement {
         if (entity && entity.title_position) {
             titlePosition = entity.title_position.toLowerCase();
         }
+
+        let invertPercentage = false;
+        if (entity && entity.invert_percentage) {
+          invertPercentage = entity.invert_percentage;
+        }
           
         let shutter = document.createElement('div');
 
@@ -107,7 +112,11 @@ class ShutterCard extends HTMLElement {
           
           let percentagePosition = (newPosition - _this.minPosition) * 100 / (_this.maxPosition - _this.minPosition);
           
-          _this.updateShutterPosition(hass, entityId, 100 - percentagePosition);
+          if (invertPercentage) {
+            _this.updateShutterPosition(hass, entityId, percentagePosition);
+          } else {
+            _this.updateShutterPosition(hass, entityId, 100 - percentagePosition);
+          }
           
           document.removeEventListener('mousemove', mouseMove);
           document.removeEventListener('touchmove', mouseMove);
@@ -184,6 +193,11 @@ class ShutterCard extends HTMLElement {
       if (entity && entity.entity) {
         entityId = entity.entity;
       }
+
+      let invertPercentage = false;
+      if (entity && entity.invert_percentage) {
+        invertPercentage = entity.invert_percentage;
+      }
         
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
@@ -201,7 +215,12 @@ class ShutterCard extends HTMLElement {
         shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
           shutterPosition.innerHTML = currentPosition + '%';
         })
-        _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+
+        if (invertPercentage) {
+          _this.setPickerPositionPercentage(currentPosition, picker, slide);
+        } else {
+          _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+        }
       }
     });
   }
