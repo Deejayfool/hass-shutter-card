@@ -25,8 +25,16 @@ This card allows to open, close or set a shutter to the opening rate you want.
 | buttons_position | string | False | `left` | Set buttons on `left` or on `right` of the shutter
 | title_position | string | False | `top` | Set title on `top` or on `bottom` of the shutter
 | invert_percentage | boolean | False | `false` | Set it to `true` if your shutter is 100% when it is closed, and 0% when it is opened
+| offset | integer | False | 0 | See [Offset configuration](#offset-configuration)
 
 _Remark : you can also just give the entity ID (without to specify `entity:`) if you don't need to specify the other configurations._
+
+#### Offset configuration
+
+Some shutter won't run relative to the cards shutter (e.g. the german _Rolladen_) and need some offset.
+Easiest way is to close the shutter to the desired 0% open position and take the shown value (e.g. `15`) as offset configuration.
+
+_Remark : Setting the shutter to real 0% is only possible by pressing the `down` button then._
 
 ### Sample
 

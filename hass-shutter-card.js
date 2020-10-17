@@ -112,6 +112,10 @@ class ShutterCard extends HTMLElement {
           
           let percentagePosition = (newPosition - _this.minPosition) * 100 / (_this.maxPosition - _this.minPosition);
           
+          if (entity && entity.offset)
+            percentagePosition = percentagePosition  * ((100 - entity.offset) / 100);
+          
+
           if (invertPercentage) {
             _this.updateShutterPosition(hass, entityId, percentagePosition);
           } else {
@@ -198,6 +202,7 @@ class ShutterCard extends HTMLElement {
       if (entity && entity.invert_percentage) {
         invertPercentage = entity.invert_percentage;
       }
+      const offset = (entity && entity.offset) ? entity.offset : false;
         
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
@@ -205,8 +210,15 @@ class ShutterCard extends HTMLElement {
         
       const state = hass.states[entityId];
       const friendlyName = (entity && entity.name) ? entity.name : state ? state.attributes.friendly_name : 'unknown';
-      const currentPosition = state ? state.attributes.current_position : 'unknown';
+      let currentPosition = state ? state.attributes.current_position : 'unknown';
       
+      if (offset){
+        if (currentPosition <= offset)
+          currentPosition = 0;
+        else
+          currentPosition = Math.round((currentPosition - offset) / ((100 - offset) / 100));
+      }
+
       shutter.querySelectorAll('.sc-shutter-label').forEach(function(shutterLabel) {
           shutterLabel.innerHTML = friendlyName;
       })
