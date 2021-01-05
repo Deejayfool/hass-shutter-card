@@ -211,15 +211,17 @@ class ShutterCard extends HTMLElement {
           shutterLabel.innerHTML = friendlyName;
       })
       
-      if (!_this.isUpdating) {
-        shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
-          shutterPosition.innerHTML = currentPosition + '%';
-        })
+      if (typeof(currentPosition) != ündefined") {
+        if (!_this.isUpdating) {
+          shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
+            shutterPosition.innerHTML = currentPosition + '%';
+          })
 
-        if (invertPercentage) {
-          _this.setPickerPositionPercentage(currentPosition, picker, slide);
-        } else {
-          _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+          if (invertPercentage) {
+            _this.setPickerPositionPercentage(currentPosition, picker, slide);
+          } else {
+            _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
+          }
         }
       }
     });
