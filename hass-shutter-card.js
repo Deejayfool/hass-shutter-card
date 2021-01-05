@@ -211,7 +211,7 @@ class ShutterCard extends HTMLElement {
           shutterLabel.innerHTML = friendlyName;
       })
       
-      if (typeof(currentPosition) != ündefined") {
+      if (typeof(currentPosition) != "undefined") {
         if (!_this.isUpdating) {
           shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
             shutterPosition.innerHTML = currentPosition + '%';
