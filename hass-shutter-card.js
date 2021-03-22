@@ -51,7 +51,7 @@ class ShutterCard extends HTMLElement {
             </div>
           </div>
           <div class="sc-shutter-middle" style="flex-direction: ` + (buttonsPosition == 'right' ? 'row-reverse': 'row') + `;">
-            <div class="sc-shutter-buttons">
+            <div class="sc-shutter-buttons"` + (buttonsPosition == 'none' ? 'style="display:none;"' : '') + `>
               <ha-icon-button icon="mdi:arrow-up" class="sc-shutter-button" data-command="up"></ha-icon-button><br>
               <ha-icon-button icon="mdi:stop" class="sc-shutter-button" data-command="stop"></ha-icon-button><br>
               <ha-icon-button icon="mdi:arrow-down" class="sc-shutter-button" data-command="down"></ha-icon-button>
