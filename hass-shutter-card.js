@@ -36,6 +36,21 @@ class ShutterCard extends HTMLElement {
         if (entity && entity.invert_percentage) {
           invertPercentage = entity.invert_percentage;
         }
+
+        let partial = 0;
+        if (entity && entity.partial_close_percentage) {
+          partial = Math.max(0,Math.min(100,entity.partial_close_percentage)); // make sure this is valid range
+        }
+
+        let offset = 0;
+        if (entity && entity.offset_closed_percentage) {
+          offset = Math.max(0,Math.min(100,entity.offset_closed_percentage)); // make sure this is valid range
+        }
+
+        let tilt = false;
+        if (entity && entity.can_tilt) {
+          tilt = entity.can_tilt;
+        }
           
         let shutter = document.createElement('div');
 
@@ -60,8 +75,8 @@ class ShutterCard extends HTMLElement {
               <div class="sc-shutter-selector-picture">
                 <div class="sc-shutter-selector-slide"></div>
                 <div class="sc-shutter-selector-picker"></div>`+
-                (entity.partial?
-                  `<div class="sc-shutter-selector-partial" style="top:`+_this.calculatePositionFromPercent(entity.partial, invertPercentage)+`px"></div>`:``
+                (partial&&!offset?
+                  `<div class="sc-shutter-selector-partial" style="top:`+_this.calculatePositionFromPercent(partial, invertPercentage, offset)+`px"></div>`:``
                 ) + `
                 <div class="sc-shutter-movement-overlay">                
                   <ha-icon class="sc-shutter-movement-open" icon="mdi:arrow-up"></ha-icon>
@@ -70,8 +85,8 @@ class ShutterCard extends HTMLElement {
               </div>
             </div>
             <div class="sc-shutter-buttons">
-              `+(entity.partial?`<ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" data-command="partial" data-position="`+entity.partial+`"><ha-icon icon="mdi:arrow-expand-vertical"></ha-icon></ha-icon-button><br>`:``)+`
-              ` + (entity.can_tilt?`
+              `+(partial?`<ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" data-command="partial" data-position="`+partial+`"><ha-icon icon="mdi:arrow-expand-vertical"></ha-icon></ha-icon-button><br>`:``)+`
+              ` + (tilt?`
               <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_tilt_cover`) +`" class="sc-shutter-button sc-shutter-button-tilt-open" data-command="tilt-open"><ha-icon icon="mdi:arrow-top-right"></ha-icon></ha-icon-button>
               <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.stop_cover`) +`"class="sc-shutter-button sc-shutter-button-stop" data-command="stop"><ha-icon icon="mdi:stop"></ha-icon></ha-icon-button><br>
               <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_tilt_cover`) +`"class="sc-shutter-button sc-shutter-button-tilt-down" data-command="tilt-close"><ha-icon icon="mdi:arrow-bottom-left"></ha-icon></ha-icon-button>
@@ -139,7 +154,7 @@ class ShutterCard extends HTMLElement {
           if (newPosition > _this.maxPosition)
             newPosition = _this.maxPosition;
           
-          let percentagePosition = (newPosition - _this.minPosition) * 100 / (_this.maxPosition - _this.minPosition);
+          let percentagePosition = (newPosition - _this.minPosition) * (1-offset) / (_this.maxPosition - _this.minPosition);
           
           if (invertPercentage) {
             _this.updateShutterPosition(hass, entityId, percentagePosition);
@@ -251,6 +266,11 @@ class ShutterCard extends HTMLElement {
         invertPercentage = entity.invert_percentage;
       }
         
+      let offset = false;
+      if (entity && entity.offset_closed_percentage) {
+        offset = entity.offset_closed_percentage;
+      }
+        
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
       const picker = shutter.querySelector('.sc-shutter-selector-picker');
@@ -266,22 +286,37 @@ class ShutterCard extends HTMLElement {
       
       if (!_this.isUpdating) {
         shutter.querySelectorAll('.sc-shutter-position').forEach(function (shutterPosition) {
-          shutterPosition.innerHTML = currentPosition + '%';
+          let visiblePosition;
+          let positionText;
+          if (invertPercentage) {
+            visiblePosition = Math.round(Math.min(100, currentPosition + offset));
+            positionText = visiblePosition + ' %';
+            if (visiblePosition == 100) {
+              positionText += ' / '+ 100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
+            }
+          }
+          else  {
+            visiblePosition = Math.max(0, currentPosition - offset);
+            positionText = visiblePosition + ' %';
+            if (visiblePosition == 0) {
+              positionText += ' / '+ Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
+            }
+          }
+          
+          shutterPosition.innerHTML = positionText;
+          
         })
 
-        if (invertPercentage) {
-          _this.setPickerPositionPercentage(currentPosition, picker, slide);
-        } else {
-          _this.setPickerPositionPercentage(100 - currentPosition, picker, slide);
-        }
+        _this.setPickerPositionPercentage(currentPosition, picker, slide, invertPercentage, offset);
+        
 
         _this.setMovement(movementState, shutter);
       }
     });
   }
 
-  calculatePositionFromPercent(percent, inverted) {
-    return (this.maxPosition - this.minPosition) * (inverted?percent:100-percent) / 100 + this.minPosition;
+  calculatePositionFromPercent(percent, inverted, offset) {
+    return (this.maxPosition - this.minPosition) * (inverted?(percent-offset):(100-percent+offset)) / 100 + this.minPosition;
   }
 
   
@@ -319,8 +354,8 @@ class ShutterCard extends HTMLElement {
     }
   }
   
-  setPickerPositionPercentage(position, picker, slide) {
-    let realPosition = (this.maxPosition - this.minPosition) * position / 100 + this.minPosition;
+  setPickerPositionPercentage(percentage, picker, slide, inverted, offset) {
+    let realPosition = this.calculatePositionFromPercent(percentage, inverted, offset);
   
     this.setPickerPosition(realPosition, picker, slide);
   }
