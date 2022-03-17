@@ -290,16 +290,16 @@ class ShutterCard extends HTMLElement {
           let positionText;
           if (invertPercentage) {
             visiblePosition = Math.round(Math.min(100, currentPosition + offset));
-            positionText = visiblePosition + ' %';
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
             if (visiblePosition == 100 && offset) {
-              positionText += ' / '+ 100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
+              positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
           else  {
             visiblePosition = Math.max(0, currentPosition - offset);
-            positionText = visiblePosition + ' %';
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
             if (visiblePosition == 0 && offset) {
-              positionText += ' / '+ Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
+              positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
           
@@ -313,6 +313,16 @@ class ShutterCard extends HTMLElement {
         _this.setMovement(movementState, shutter);
       }
     });
+  }
+
+  positionPercentToText(percent, inverted, hass) {
+    if (percent == 100) {
+      return hass.localize(inverted?'ui.components.logbook.messages.was_closed':'ui.components.logbook.messages.was_opened');
+    }
+    else if (percent == 0) {
+      return hass.localize(inverted?'ui.components.logbook.messages.was_opened':'ui.components.logbook.messages.was_closed');
+    }
+    return percent + ' %';
   }
 
   calculatePositionFromPercent(percent, inverted, offset) {
