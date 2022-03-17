@@ -91,6 +91,20 @@ class ShutterCard extends HTMLElement {
         let picture = shutter.querySelector('.sc-shutter-selector-picture');
         let slide = shutter.querySelector('.sc-shutter-selector-slide');
         let picker = shutter.querySelector('.sc-shutter-selector-picker');
+        let labels = shutter.querySelectorAll('.sc-shutter-label');
+
+        let detailOpen = function(event) {
+            let e = new Event('hass-more-info', { composed: true });
+            e.detail = {
+              entityId
+            };
+            _this.dispatchEvent(e);
+        }
+
+        labels.forEach((labelDOM) => {
+            labelDOM.addEventListener('click', detailOpen);
+          }
+        )        
         
         let mouseDown = function(event) {
             if (event.cancelable) {
@@ -217,7 +231,7 @@ class ShutterCard extends HTMLElement {
                 .sc-shutter-movement-close {display: none}
           .sc-shutter-top { text-align: center; margin-bottom: 1rem; }
           .sc-shutter-bottom { text-align: center; margin-top: 1rem; }
-            .sc-shutter-label { display: inline-block; font-size: 20px; vertical-align: middle; }
+            .sc-shutter-label { display: inline-block; font-size: 20px; vertical-align: middle; cursor: pointer;}
             .sc-shutter-position { display: inline-block; vertical-align: middle; padding: 0 6px; margin-left: 1rem; border-radius: 2px; background-color: var(--secondary-background-color); }
       `;
     
