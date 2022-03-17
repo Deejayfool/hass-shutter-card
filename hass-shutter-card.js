@@ -62,6 +62,14 @@ class ShutterCard extends HTMLElement {
                 <div class="sc-shutter-selector-picker"></div>
               </div>
             </div>
+            <div class="sc-shutter-buttons">
+              `+(entity.partial?`<ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" data-command="partial" data-position="`+entity.partial+`"><ha-icon icon="mdi:arrow-expand-vertical"></ha-icon></ha-icon-button><br>`:``)+`
+              ` + (entity.can_tilt?`
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_tilt_cover`) +`" class="sc-shutter-button sc-shutter-button-tilt-open" data-command="tilt-open"><ha-icon icon="mdi:arrow-top-right"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.stop_cover`) +`"class="sc-shutter-button sc-shutter-button-stop" data-command="stop"><ha-icon icon="mdi:stop"></ha-icon></ha-icon-button><br>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_tilt_cover`) +`"class="sc-shutter-button sc-shutter-button-tilt-down" data-command="tilt-close"><ha-icon icon="mdi:arrow-bottom-left"></ha-icon></ha-icon-button>
+              `:``) + `
+            </div>
           </div>
           <div class="sc-shutter-bottom" ` + (titlePosition != 'bottom' ? 'style="display:none;"' : '') + `>
             <div class="sc-shutter-label">
@@ -138,6 +146,7 @@ class ShutterCard extends HTMLElement {
                 const command = this.dataset.command;
                 
                 let service = '';
+                let args = ''
                 
                 switch (command) {
                   case 'up':
@@ -147,14 +156,29 @@ class ShutterCard extends HTMLElement {
                   case 'down':
                       service = 'close_cover';
                       break;
-                
+
                   case 'stop':
                       service = 'stop_cover';
                       break;
+                  case 'partial':
+                      service = 'set_cover_position';
+                      args = {
+                        position: this.dataset.position
+                      }
+                      break;
+                  case 'tilt-open':
+                    service = 'open_cover_tile';
+                    break;
+                  case 'tilt-close':
+                    service = 'close_cover_tile';
+                    break;
+                  default:
+                    return
                 }
                 
                 hass.callService('cover', service, {
-                  entity_id: entityId
+                  entity_id: entityId,
+                  ...args
                 });
             };
         });
