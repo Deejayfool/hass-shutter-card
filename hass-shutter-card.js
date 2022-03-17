@@ -154,7 +154,7 @@ class ShutterCard extends HTMLElement {
           if (newPosition > _this.maxPosition)
             newPosition = _this.maxPosition;
           
-          let percentagePosition = (newPosition - _this.minPosition) * (1-offset) / (_this.maxPosition - _this.minPosition);
+          let percentagePosition = (newPosition - _this.minPosition) * (100-offset) / (_this.maxPosition - _this.minPosition);
           
           if (invertPercentage) {
             _this.updateShutterPosition(hass, entityId, percentagePosition);
@@ -291,14 +291,14 @@ class ShutterCard extends HTMLElement {
           if (invertPercentage) {
             visiblePosition = Math.round(Math.min(100, currentPosition + offset));
             positionText = visiblePosition + ' %';
-            if (visiblePosition == 100) {
+            if (visiblePosition == 100 && offset) {
               positionText += ' / '+ 100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
             }
           }
           else  {
             visiblePosition = Math.max(0, currentPosition - offset);
             positionText = visiblePosition + ' %';
-            if (visiblePosition == 0) {
+            if (visiblePosition == 0 && offset) {
               positionText += ' / '+ Math.round(Math.abs(currentPosition-visiblePosition)/offset*100) +' %';
             }
           }
