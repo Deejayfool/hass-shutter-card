@@ -212,10 +212,10 @@ class ShutterCard extends HTMLElement {
                       }
                       break;
                   case 'tilt-open':
-                    service = 'open_cover_tile';
+                    service = 'open_cover_tilt';
                     break;
                   case 'tilt-close':
-                    service = 'close_cover_tile';
+                    service = 'close_cover_tilt';
                     break;
                   default:
                     return
