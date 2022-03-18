@@ -249,8 +249,8 @@ class ShutterCard extends HTMLElement {
               .sc-shutter-selector-picker { position: absolute; top: 19px; left: 6%; width: 88%; cursor: pointer; height: 20px; background-repeat: no-repeat; }
                 .sc-shutter-selector-picker { background-image: url(data:@file/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIkAAAAHCAYAAAA8nm5hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAIGNIUk0AAHpPAACA1wAA+5gAAH6BAAB41AAA6bgAADhTAAAa8BY+DIIAAAG4SURBVHja7JYxstowEIZ/rWTJNuPODZyAjipFCq6Qw+RyHILuVXTMQGMzYxwDwpawrVT2MEkeL34UITP+GzXaWUnfr91lm83m+2w2+6qUgnMOQ9W2LYioX0e9rpxzYIzBOQfn3ENeRITD4aCLongTxpgvVVV9q+t6kEkYYwAAzjk8z0NVVf1BRr2eOl5dMTDGPNxLRDDG/DDGKKG1llpr2blqCGTOOeI4BuccdV3jer2ONF64ioRhiCiKYK1FVVWw1vbm+RPbsiyDsiylUEq1vu9jqEkYY7jdbrhcLphMJmCMQSn1btJR/17WWmit++ovhHiXNxFBStlIKVsRBAEFQQDO+aCEnHPsdjusVissFgvM53P4vj+SeFEREdbrNbbbLZbLJabTKdq2fbjfGMOttSTyPLee5xnOeT/Y/G0l2e/3iKIIYRgiy7J+ILrvgaOeaxG/zhSfiWeMoa5rZFmGOI4BAGmaPuwaRISiKMrT6WRFkiRra63oTDLEmWmaAgDyPMfxePztUv/DEHv/+B9BeRbaMyYZkvc+rvv4TdMgz3PEcYwkSdA0zYd8z+ez1lq//QQAAP//AwAV5u5HIxEL5wAAAABJRU5ErkJggg==); }
               .sc-shutter-movement-overlay { 
-                position: absolute; top: 19px; left: 6%; width: 88%; height: 100%;
-                background-color: rgba(0,0,0,0.3); text-align: center; --mdc-icon-size: 80px
+                position: absolute; top: 19px; left: 6%; width: 88%; height: 118px;
+                background-color: rgba(0,0,0,0.3); text-align: center; --mdc-icon-size: 60px
               }
                 .sc-shutter-movement-open {display: none}
                 .sc-shutter-movement-close {display: none}
@@ -299,14 +299,14 @@ class ShutterCard extends HTMLElement {
           let visiblePosition;
           let positionText;
           if (invertPercentage) {
-            visiblePosition = Math.round(Math.min(100, currentPosition + offset));
+            visiblePosition = offset?Math.min(100, Math.round(currentPosition / offset * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
             if (visiblePosition == 100 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
           else  {
-            visiblePosition = Math.max(0, currentPosition - offset);
+            visiblePosition = offset?Math.max(0, Math.round((currentPosition - offset) / (100-offset) * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
             if (visiblePosition == 0 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
@@ -336,7 +336,14 @@ class ShutterCard extends HTMLElement {
   }
 
   calculatePositionFromPercent(percent, inverted, offset) {
-    return (this.maxPosition - this.minPosition) * (inverted?(percent-offset):(100-percent+offset)) / 100 + this.minPosition;
+    let visiblePosition;
+    if (inverted) {
+      visiblePosition = offset?Math.min(100, Math.round(percent / offset * 100 )):percent;
+    }
+    else  {
+      visiblePosition = offset?Math.max(0, Math.round((percent - offset) / (100-offset) * 100 )):percent;
+    }
+    return (this.maxPosition - this.minPosition) * (inverted?visiblePosition:100-visiblePosition) / 100 + this.minPosition;
   }
 
   
