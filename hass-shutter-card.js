@@ -281,6 +281,10 @@ class ShutterCard extends HTMLElement {
         offset = entity.offset_closed_percentage;
       }
         
+      let alwaysPercentage = false;
+      if (entity && entity.always_percentage) {
+        alwaysPercentage = entity.always_percentage;
+      }
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
       const picker = shutter.querySelector('.sc-shutter-selector-picker');
@@ -300,14 +304,14 @@ class ShutterCard extends HTMLElement {
           let positionText;
           if (invertPercentage) {
             visiblePosition = offset?Math.min(100, Math.round(currentPosition / offset * 100 )):currentPosition;
-            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
             if (visiblePosition == 100 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
           else  {
             visiblePosition = offset?Math.max(0, Math.round((currentPosition - offset) / (100-offset) * 100 )):currentPosition;
-            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, hass);
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
             if (visiblePosition == 0 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
@@ -325,12 +329,14 @@ class ShutterCard extends HTMLElement {
     });
   }
 
-  positionPercentToText(percent, inverted, hass) {
-    if (percent == 100) {
-      return hass.localize(inverted?'ui.components.logbook.messages.was_closed':'ui.components.logbook.messages.was_opened');
-    }
-    else if (percent == 0) {
-      return hass.localize(inverted?'ui.components.logbook.messages.was_opened':'ui.components.logbook.messages.was_closed');
+  positionPercentToText(percent, inverted, alwaysPercentage, hass) {
+    if (!alwaysPercentage) {
+      if (percent == 100) {
+        return hass.localize(inverted?'ui.components.logbook.messages.was_closed':'ui.components.logbook.messages.was_opened');
+      }
+      else if (percent == 0) {
+        return hass.localize(inverted?'ui.components.logbook.messages.was_opened':'ui.components.logbook.messages.was_closed');
+      }
     }
     return percent + ' %';
   }
