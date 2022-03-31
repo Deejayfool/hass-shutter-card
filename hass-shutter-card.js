@@ -285,6 +285,12 @@ class ShutterCard extends HTMLElement {
       if (entity && entity.always_percentage) {
         alwaysPercentage = entity.always_percentage;
       }
+
+      let disableEnd = false;
+      if (entity && entity.disable_end_buttons) {
+        disableEnd = entity.disable_end_buttons;
+      }
+
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
       const picker = shutter.querySelector('.sc-shutter-selector-picker');
@@ -305,6 +311,9 @@ class ShutterCard extends HTMLElement {
           if (invertPercentage) {
             visiblePosition = offset?Math.min(100, Math.round(currentPosition / offset * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
+            if (disableEnd) {
+              _this.changeButtonState(shutter, currentPosition, invertPercentage);
+            }
             if (visiblePosition == 100 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
@@ -312,6 +321,9 @@ class ShutterCard extends HTMLElement {
           else  {
             visiblePosition = offset?Math.max(0, Math.round((currentPosition - offset) / (100-offset) * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
+            if (disableEnd) {
+              _this.changeButtonState(shutter, currentPosition, invertPercentage);
+            }
             if (visiblePosition == 0 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
@@ -327,6 +339,33 @@ class ShutterCard extends HTMLElement {
         _this.setMovement(movementState, shutter);
       }
     });
+  }
+
+  changeButtonState(shutter, percent, inverted) {
+    if (percent == 0) {
+      shutter.querySelectorAll('.sc-shutter-button-up').forEach(function(button) {
+        button.disabled = inverted;
+      });
+      shutter.querySelectorAll('.sc-shutter-button-down').forEach(function(button) {
+        button.disabled = !inverted;
+      });
+    }
+    else if (percent == 100) {
+      shutter.querySelectorAll('.sc-shutter-button-up').forEach(function(button) {
+        button.disabled = !inverted;
+      });
+      shutter.querySelectorAll('.sc-shutter-button-down').forEach(function(button) {
+        button.disabled = inverted;
+      }) ;     
+    }
+    else {      
+      shutter.querySelectorAll('.sc-shutter-button-up').forEach(function(button) {
+        button.disabled = false;
+      });
+      shutter.querySelectorAll('.sc-shutter-button-down').forEach(function(button) {
+        button.disabled = false;
+      }) ;
+    }
   }
 
   positionPercentToText(percent, inverted, alwaysPercentage, hass) {
