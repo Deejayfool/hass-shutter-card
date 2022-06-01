@@ -1,6 +1,6 @@
 # Shutter card
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](http://www.huahuacaocao.com/product)
 [![buymeacoffee_badge](https://img.shields.io/badge/Donate-Buymeacoffee-orange?style=for-the-badge)](https://www.buymeacoffee.com/Deejayfool)
 
 **Note : Be careful, since version 2021.11.0 of Home Assistant, there is a breaking change in the icon buttons. So install v1.3.0 of this card only if you have at least the version 2021.11.0 of Home Assistant**
