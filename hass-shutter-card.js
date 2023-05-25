@@ -291,6 +291,25 @@ class ShutterCard extends HTMLElement {
         disableEnd = entity.disable_end_buttons;
       }
 
+      let stateDisable = false;
+      let stopDisabledStates = [];
+      if (entity && entity.stop_disabled_states) {
+        stateDisable = true;
+        stopDisabledStates = entity.stop_disabled_states;
+      }
+
+      let upDisabledStates = [];
+      if (entity && entity.up_disabled_states) {
+        stateDisable = true;
+        upDisabledStates = entity.up_disabled_states;
+      }
+
+      let downDisabledStates = [];
+      if (entity && entity.down_disabled_states) {
+        stateDisable = true;
+        downDisabledStates = entity.down_disabled_states;
+      }
+
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
       const picker = shutter.querySelector('.sc-shutter-selector-picker');
@@ -312,25 +331,29 @@ class ShutterCard extends HTMLElement {
             visiblePosition = offset?Math.min(100, Math.round(currentPosition / offset * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
             if (disableEnd) {
-              _this.changeButtonState(shutter, currentPosition, invertPercentage);
+              _this.changeButtonState(shutter, movementState, currentPosition, invertPercentage);
+            } else if (stateDisable) {
+              _this.changeButtonStateForState(shutter, movementState, stopDisabledStates, upDisabledStates, downDisabledStates);
             }
             if (visiblePosition == 100 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
-          else  {
+          else {
             visiblePosition = offset?Math.max(0, Math.round((currentPosition - offset) / (100-offset) * 100 )):currentPosition;
             positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
             if (disableEnd) {
-              _this.changeButtonState(shutter, currentPosition, invertPercentage);
+              _this.changeButtonState(shutter, movementState, currentPosition, invertPercentage);
+            } else if (stateDisable) {
+              _this.changeButtonStateForState(shutter, movementState, stopDisabledStates, upDisabledStates, downDisabledStates);
             }
             if (visiblePosition == 0 && offset) {
               positionText += ' ('+ (100-Math.round(Math.abs(currentPosition-visiblePosition)/offset*100)) +' %)';
             }
           }
-          
+
           shutterPosition.innerHTML = positionText;
-          
+
         })
 
         _this.setPickerPositionPercentage(currentPosition, picker, slide, invertPercentage, offset);
@@ -366,6 +389,19 @@ class ShutterCard extends HTMLElement {
         button.disabled = false;
       }) ;
     }
+  }
+  
+  changeButtonStateForState(shutter, movementState, stopDisabledStates, upDisabledStates, downDisabledStates) {
+    shutter.querySelectorAll('.sc-shutter-button-stop').forEach(function (button) {
+
+      button.disabled = stopDisabledStates.includes(movementState);
+    });
+    shutter.querySelectorAll('.sc-shutter-button-up').forEach(function (button) {
+      button.disabled = upDisabledStates.includes(movementState);
+    });
+    shutter.querySelectorAll('.sc-shutter-button-down').forEach(function (button) {
+      button.disabled = downDisabledStates.includes(movementState);
+    });
   }
 
   positionPercentToText(percent, inverted, alwaysPercentage, hass) {
