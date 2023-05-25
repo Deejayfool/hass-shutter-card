@@ -33,6 +33,9 @@ This card allows to open, close or set a shutter to the opening rate you want.
 | always_percentage | boolean | False | `false` | If set to `true`, the end states (opened/closed) will be also as numbers (0 / 100 % ) instead of a text
 | shutter_width_px | int | False | `153` | Set shutter visualization width in px. You can make it thicker or narrower to fit your layout.
 | disable_end_buttons | boolean | False | `false` | If set to `true`, the end states (opened/closed) will also deactivate the buttons for that direction (i.e. the "up" button will be disabled when the shutters are fully open)
+| up_disabled_states | string list | False | empty list | Any state strings ('opening', 'open', etc.) added will disable the 'up' button when the cover is in any of the listed states.  This is instead of the disable_end_buttons option and can be combined with other *_disabled_states options.
+| down_disabled_states | string list | False | empty list | Any state strings ('closing', 'closed', etc.) added will disable the 'down' button when the cover is in any of the listed states.  This is instead of the disable_end_buttons option and can be combined with other *_disabled_states options.
+| stop_disabled_states | string list | False | empty list | Any state strings ('open', 'closed', etc.) added will disable the 'stop' button when the cover is in any of the listed states.  This is instead of the disable_end_buttons option and can be combined with other *_disabled_states options.
 
 _Remark : you can also just give the entity ID (without to specify `entity:`) if you don't need to specify the other configurations._
 
