@@ -17,6 +17,8 @@ This card allows to open, close or set a shutter to the opening rate you want.
 | ---- | ---- | -------- | ------- | -----------
 | type | string | True | - | Must be "custom:shutter-card"
 | title | string | False | - | Title of the card
+| text_opened | string | False | - | Custom text for state opened
+| text_closed | string | False | - | Custom text for state closed
 
 ### Entities
 
