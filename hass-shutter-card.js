@@ -61,13 +61,18 @@ class ShutterCard extends HTMLElement {
         if (entity && entity.shutter_width_px) {
           width = Math.max(10,entity.shutter_width_px); // make sure this is valid range
         }
+
+        let showSlidePercentage = true;
+        if (entity && entity.disable_sliding_percentage) {
+          showSlidePercentage = false;
+        }
           
         let shutter = document.createElement('div');
 
         shutter.className = 'sc-shutter';
         shutter.dataset.shutter = entityId;
         shutter.innerHTML = `
-          <div class="sc-shutter-top" ` + (titlePosition == 'bottom' ? 'style="display:none;"' : '') + `>
+          <div class="sc-shutter-top" ` + (titlePosition == 'bottom' || titlePosition == 'hide' ? 'style="display:none;"' : '') + `>
             <div class="sc-shutter-label">
             
             </div>
@@ -90,7 +95,9 @@ class ShutterCard extends HTMLElement {
             </div>
             <div class="sc-shutter-selector">
               <div class="sc-shutter-selector-picture" style="width: `+ width +`px">
-                <div class="sc-shutter-selector-slide"></div>
+                <div class="sc-shutter-selector-slide">
+                  <div class="sc-shutter-floating-position"></div>
+                </div>
                 <div class="sc-shutter-selector-picker"></div>`+
                 (partial&&!offset?
                   `<div class="sc-shutter-selector-partial" style="top:`+_this.calculatePositionFromPercent(partial, invertPercentage, offset)+`px"></div>`:``
@@ -102,7 +109,7 @@ class ShutterCard extends HTMLElement {
               </div>
             </div>
           </div>
-          <div class="sc-shutter-bottom" ` + (titlePosition != 'bottom' ? 'style="display:none;"' : '') + `>
+          <div class="sc-shutter-bottom" ` + (titlePosition != 'bottom' || titlePosition == 'hide' ? 'style="display:none;"' : '') + `>
             <div class="sc-shutter-label">
             
             </div>
@@ -116,6 +123,7 @@ class ShutterCard extends HTMLElement {
         let slide = shutter.querySelector('.sc-shutter-selector-slide');
         let picker = shutter.querySelector('.sc-shutter-selector-picker');
         let labels = shutter.querySelectorAll('.sc-shutter-label');
+        let floatingPosition = shutter.querySelector('.sc-shutter-floating-position');
 
         let detailOpen = function(event) {
             let e = new Event('hass-more-info', { composed: true });
@@ -145,11 +153,28 @@ class ShutterCard extends HTMLElement {
             document.addEventListener('mouseup', mouseUp);
             document.addEventListener('touchend', mouseUp);
             document.addEventListener('pointerup', mouseUp);
+            
+            if (showSlidePercentage) floatingPosition.style.display = 'block';
         };
   
         let mouseMove = function(event) {
           let newPosition = event.pageY - _this.getPictureTop(picture);
           _this.setPickerPosition(newPosition, picker, slide);
+          
+          if (newPosition < _this.minPosition)
+            newPosition = _this.minPosition;
+          
+          if (newPosition > _this.maxPosition)
+            newPosition = _this.maxPosition;
+          
+          let percentagePosition = (newPosition - _this.minPosition) * (100-offset) / (_this.maxPosition - _this.minPosition);
+          
+          if (!invertPercentage) {
+            percentagePosition = 100 - percentagePosition;
+          } 
+          let shutterPosition = Math.round(percentagePosition);
+          
+          floatingPosition.innerHTML = shutterPosition + "%";
         };
            
         let mouseUp = function(event) {
@@ -178,6 +203,8 @@ class ShutterCard extends HTMLElement {
           document.removeEventListener('mouseup', mouseUp);
           document.removeEventListener('touchend', mouseUp);
           document.removeEventListener('pointerup', mouseUp);
+          
+          if (showSlidePercentage) floatingPosition.style.display = 'none';
         };
       
         //Manage slider update
@@ -258,6 +285,7 @@ class ShutterCard extends HTMLElement {
           .sc-shutter-bottom { text-align: center; margin-top: 1rem; }
             .sc-shutter-label { display: inline-block; font-size: 20px; vertical-align: middle; cursor: pointer;}
             .sc-shutter-position { display: inline-block; vertical-align: middle; padding: 0 6px; margin-left: 1rem; border-radius: 2px; background-color: var(--secondary-background-color); }
+            .sc-shutter-floating-position { display: none; position: absolute; width: 4ex; margin-left: auto; margin-right: auto; left: 0px; right: 0px; bottom: 0px; border-radius: 2px; background-color: var(--secondary-background-color); text-align: center; }
       `;
     
       this.card.appendChild(allShutters);
@@ -294,6 +322,7 @@ class ShutterCard extends HTMLElement {
       const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
       const slide = shutter.querySelector('.sc-shutter-selector-slide');
       const picker = shutter.querySelector('.sc-shutter-selector-picker');
+      const floatingPosition = shutter.querySelector('.sc-shutter-floating-position');
         
       const state = hass.states[entityId];
       const friendlyName = (entity && entity.name) ? entity.name : state ? state.attributes.friendly_name : 'unknown';
@@ -332,6 +361,8 @@ class ShutterCard extends HTMLElement {
           shutterPosition.innerHTML = positionText;
           
         })
+        
+        floatingPosition.innerHTML = currentPosition + "%";
 
         _this.setPickerPositionPercentage(currentPosition, picker, slide, invertPercentage, offset);
         
