@@ -156,11 +156,8 @@ class ShutterCard extends HTMLElement {
             
             if (showSlidePercentage) floatingPosition.style.display = 'block';
         };
-  
-        let mouseMove = function(event) {
-          let newPosition = event.pageY - _this.getPictureTop(picture);
-          _this.setPickerPosition(newPosition, picker, slide);
-          
+
+        const newPercent = function (newPosition) {
           if (newPosition < _this.minPosition)
             newPosition = _this.minPosition;
           
@@ -172,9 +169,15 @@ class ShutterCard extends HTMLElement {
           if (!invertPercentage) {
             percentagePosition = 100 - percentagePosition;
           } 
-          let shutterPosition = Math.round(percentagePosition);
+
+          return Math.round(percentagePosition);
+        }
+  
+        let mouseMove = function(event) {
+          let newPosition = event.pageY - _this.getPictureTop(picture);
+          _this.setPickerPosition(newPosition, picker, slide);
           
-          floatingPosition.innerHTML = shutterPosition + "%";
+          floatingPosition.innerHTML = newPercent(newPosition) + "%";
         };
            
         let mouseUp = function(event) {
@@ -182,19 +185,7 @@ class ShutterCard extends HTMLElement {
             
           let newPosition = event.pageY - _this.getPictureTop(picture);
           
-          if (newPosition < _this.minPosition)
-            newPosition = _this.minPosition;
-          
-          if (newPosition > _this.maxPosition)
-            newPosition = _this.maxPosition;
-          
-          let percentagePosition = (newPosition - _this.minPosition) * (100-offset) / (_this.maxPosition - _this.minPosition);
-          
-          if (invertPercentage) {
-            _this.updateShutterPosition(hass, entityId, percentagePosition);
-          } else {
-            _this.updateShutterPosition(hass, entityId, 100 - percentagePosition);
-          }
+          _this.updateShutterPosition(hass, entityId, newPercent(newPosition));
           
           document.removeEventListener('mousemove', mouseMove);
           document.removeEventListener('touchmove', mouseMove);
@@ -475,11 +466,9 @@ class ShutterCard extends HTMLElement {
   }
   
   updateShutterPosition(hass, entityId, position) {
-    let shutterPosition = Math.round(position);
-  
     hass.callService('cover', 'set_cover_position', {
       entity_id: entityId,
-      position: shutterPosition
+      position: position
     });
   }
 
