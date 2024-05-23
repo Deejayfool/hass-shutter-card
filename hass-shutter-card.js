@@ -77,16 +77,16 @@ class ShutterCard extends HTMLElement {
           </div>
           <div class="sc-shutter-middle" style="flex-flow: ` + (buttonsInRow ? 'column': 'row') + (buttonsContainerReversed ? '-reverse' : '') + ` nowrap;">
             <div class="sc-shutter-buttons" style="flex-flow: ` + (buttonsInRow ? 'row': 'column') + ` wrap;">
-              `+(partial?`<ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" data-command="partial" data-position="`+partial+`"><ha-icon icon="mdi:arrow-expand-vertical"></ha-icon></ha-icon-button>`:``)+`
+              `+(partial?`<ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" data-command="partial" data-position="`+partial+`"><ha-icon class="sc-shutter-ha-icon"icon="mdi:arrow-expand-vertical"></ha-icon></ha-icon-button>`:``)+`
               ` + (tilt?`
-              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_tilt_cover`) +`" class="sc-shutter-button sc-shutter-button-tilt-open" data-command="tilt-open"><ha-icon icon="mdi:arrow-top-right"></ha-icon></ha-icon-button>
-              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_tilt_cover`) +`"class="sc-shutter-button sc-shutter-button-tilt-down" data-command="tilt-close"><ha-icon icon="mdi:arrow-bottom-left"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_tilt_cover`) +`" class="sc-shutter-button sc-shutter-button-tilt-open" data-command="tilt-open"><ha-icon class="sc-shutter-ha-icon"icon="mdi:arrow-top-right"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_tilt_cover`) +`"class="sc-shutter-button sc-shutter-button-tilt-down" data-command="tilt-close"><ha-icon class="sc-shutter-ha-icon"icon="mdi:arrow-bottom-left"></ha-icon></ha-icon-button>
               `:``) + `
             </div>
             <div class="sc-shutter-buttons" style="flex-flow: ` + (buttonsInRow ? 'row': 'column') + ` wrap;">
-              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_cover`) +`" class="sc-shutter-button sc-shutter-button-up" data-command="up"><ha-icon icon="mdi:arrow-up"></ha-icon></ha-icon-button>
-              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.stop_cover`) +`"class="sc-shutter-button sc-shutter-button-stop" data-command="stop"><ha-icon icon="mdi:stop"></ha-icon></ha-icon-button>
-              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_cover`) +`" class="sc-shutter-button sc-shutter-button-down" data-command="down"><ha-icon icon="mdi:arrow-down"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.open_cover`) +`" class="sc-shutter-button sc-shutter-button-up" data-command="up"><ha-icon class="sc-shutter-ha-icon"icon="mdi:arrow-up"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.stop_cover`) +`"class="sc-shutter-button sc-shutter-button-stop" data-command="stop"><ha-icon class="sc-shutter-ha-icon"icon="mdi:stop"></ha-icon></ha-icon-button>
+              <ha-icon-button label="` + hass.localize(`ui.dialogs.more_info_control.cover.close_cover`) +`" class="sc-shutter-button sc-shutter-button-down" data-command="down"><ha-icon class="sc-shutter-ha-icon"icon="mdi:arrow-down"></ha-icon></ha-icon-button>
             </div>
             <div class="sc-shutter-selector">
               <div class="sc-shutter-selector-picture" style="width: `+ width +`px">
@@ -96,8 +96,8 @@ class ShutterCard extends HTMLElement {
                   `<div class="sc-shutter-selector-partial" style="top:`+_this.calculatePositionFromPercent(partial, invertPercentage, offset)+`px"></div>`:``
                 ) + `
                 <div class="sc-shutter-movement-overlay">                
-                  <ha-icon class="sc-shutter-movement-open" icon="mdi:arrow-up"></ha-icon>
-                  <ha-icon class="sc-shutter-movement-close" icon="mdi:arrow-down"></ha-icon>
+                  <ha-icon class="sc-shutter-ha-icon sc-shutter-movement-open" icon="mdi:arrow-up"></ha-icon>
+                  <ha-icon class="sc-shutter-ha-icon sc-shutter-movement-close" icon="mdi:arrow-down"></ha-icon>
                 </div>
               </div>
             </div>
@@ -254,6 +254,7 @@ class ShutterCard extends HTMLElement {
               }
                 .sc-shutter-movement-open {display: none}
                 .sc-shutter-movement-close {display: none}
+          .sc-shutter-ha-icon { padding-bottom: 10px; }
           .sc-shutter-top { text-align: center; margin-bottom: 1rem; }
           .sc-shutter-bottom { text-align: center; margin-top: 1rem; }
             .sc-shutter-label { display: inline-block; font-size: 20px; vertical-align: middle; cursor: pointer;}
