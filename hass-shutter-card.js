@@ -32,6 +32,11 @@ class ShutterCard extends HTMLElement {
         const buttonsInRow = buttonsPosition == 'top' || buttonsPosition == 'bottom';
         const buttonsContainerReversed = buttonsPosition == 'bottom' || buttonsPosition == 'right';
         
+        let partial_open_buttons_displayed = false;
+        if (entity && entity.partial_open_buttons_displayed) {
+          partial_open_buttons_displayed = entity.partial_open_buttons_displayed;
+        }
+
         let titlePosition = 'top';
         if (entity && entity.title_position) {
             titlePosition = entity.title_position.toLowerCase();
@@ -101,6 +106,18 @@ class ShutterCard extends HTMLElement {
                 </div>
               </div>
             </div>
+            <div ` + (partial_open_buttons_displayed ?  + 'style="flex-flow: column wrap;"' : 'style="display:none;"') + `>
+              <div class="sc-shutter-buttons" style="flex-flow: row wrap;">
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="100" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4Z"></ha-icon-button>
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="75" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9Z"></ha-icon-button>
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="50" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12Z"></ha-icon-button>
+              </div>
+              <div class="sc-shutter-buttons" style="flex-flow: row wrap;">
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="25" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15Z"></ha-icon-button>
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="10" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z"></ha-icon-button>
+                <ha-icon-button label="Partially close" class="sc-shutter-button" data-command="partial" data-position="0" path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V20H8V18Z"></ha-icon-button>
+              </div>
+            <div>
           </div>
           <div class="sc-shutter-bottom" ` + (titlePosition != 'bottom' ? 'style="display:none;"' : '') + `>
             <div class="sc-shutter-label">
