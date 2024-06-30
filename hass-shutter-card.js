@@ -74,17 +74,7 @@ class Shutter extends LitElement {
   //  name: Left shutter
   //  buttons_position: left
   //  title_position: bottom
-
-
-  /*
-  let picture = shutter.querySelector('.sc-shutter-selector-picture');
-  let slide = shutter.querySelector('.sc-shutter-selector-slide');
-  let picker = shutter.querySelector('.sc-shutter-selector-picker');
-        const shutter = _this.card.querySelector('div[data-shutter="' + entityId +'"]');
-      const slide = shutter.querySelector('.sc-shutter-selector-slide');
-      const picker = shutter.querySelector('.sc-shutter-selector-picker');
-  */       
-
+  
   getInvertPercentage() {
     return this.config.invert_percentage ? this.config.invert_percentage : false;
   }
@@ -313,7 +303,6 @@ class Shutter extends LitElement {
       default:
         return
     }
-
 
     //console.log("set new shutter action for {}, {} : {}", entityId, service, args);
     
