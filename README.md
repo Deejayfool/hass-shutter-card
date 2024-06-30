@@ -47,7 +47,7 @@ entities:
     name: Left shutter
     buttons_position: left
     title_position: bottom
-  - cover.bedroom_shutter
+  - entity: cover.bedroom_shutter
 ```
 
 ## Install
