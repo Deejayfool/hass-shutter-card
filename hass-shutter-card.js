@@ -93,6 +93,8 @@ class Shutter extends LitElement {
     const currentPosition = state ? state.attributes.current_position : 'unknown';
     const movementState = state? state.state : 'unknown';
 
+    const disabledGlobaly = state.state == "unavailable";
+
     let buttonsPosition = 'left';
     if (this.config.buttons_position) {
       buttonsPosition = this.config.buttons_position.toLowerCase();
@@ -152,31 +154,31 @@ class Shutter extends LitElement {
     return html`
       <div class="sc-shutter" data-shutter="${entityId}">
         <div class="sc-shutter-top" style="display: ${titlePosition == 'bottom' ? 'none' : 'block'}" >
-          <div class="sc-shutter-label" @click="${() => this.doDetailOpen(entityId)}" >
+          <div class="sc-shutter-label ${disabledGlobaly ? 'sc-shutter-label-disabled' : ''}" @click="${() => this.doDetailOpen(entityId)}" >
             ${friendlyName}
           </div>
-          <div class="sc-shutter-position">
+          <div class="sc-shutter-position ${disabledGlobaly ? 'sc-shutter-label-disabled' : ''}">
             ${positionText}
           </div>
         </div>
         <div class="sc-shutter-middle" style="flex-flow: ${buttonsInRow ? 'column': 'row'}${buttonsContainerReversed ? '-reverse' : ''} nowrap;">
           <div class="sc-shutter-buttons" style="flex-flow: ${buttonsInRow ? 'row': 'column'} wrap;">
             ${partial ? html`
-                          <ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" @click="${()=> this.doOnclick(entityId, "partial", partial)}" >
+                          <ha-icon-button label="Partially close" class="sc-shutter-button sc-shutter-button-partial" .disabled=${disabledGlobaly} @click="${()=> this.doOnclick(entityId, "partial", partial)}" >
                               <ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-expand-vertical"></ha-icon>
                           </ha-icon-button>` : ''}
             ${tilt ? html`
-                      <ha-icon-button label="${this.hass.localize('ui.card.cover.open_tilt_cover')}" class="sc-shutter-button sc-shutter-button-tilt-open" @click="${()=> this.doOnclick(entityId, "tilt-open")}">
+                      <ha-icon-button label="${this.hass.localize('ui.card.cover.open_tilt_cover')}" class="sc-shutter-button sc-shutter-button-tilt-open" .disabled=${disabledGlobaly} @click="${()=> this.doOnclick(entityId, "tilt-open")}">
                           <ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-top-right"></ha-icon>
                       </ha-icon-button>
-                      <ha-icon-button label="${this.hass.localize('ui.card.cover.close_tilt_cover')}" class="sc-shutter-button sc-shutter-button-tilt-down" @click="${()=> this.doOnclick(entityId, "tilt-close")}">
+                      <ha-icon-button label="${this.hass.localize('ui.card.cover.close_tilt_cover')}" class="sc-shutter-button sc-shutter-button-tilt-down" .disabled=${disabledGlobaly} @click="${()=> this.doOnclick(entityId, "tilt-close")}">
                           <ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-bottom-left"></ha-icon>
                       </ha-icon-button>` : ''}
           </div>
           <div class="sc-shutter-buttons" style="flex-flow: ${buttonsInRow ? 'row': 'column'} wrap;">
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.open_cover')}" class="sc-shutter-button sc-shutter-button-up" .disabled=${upDisabled} @click=${()=> this.doOnclick(entityId, "up")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-up"></ha-icon></ha-icon-button>
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.stop_cover')}" class="sc-shutter-button sc-shutter-button-stop" @click=${()=> this.doOnclick(entityId, "stop")}><ha-icon class="sc-shutter-ha-icon" icon="mdi:stop"></ha-icon></ha-icon-button>
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.close_cover')}" class="sc-shutter-button sc-shutter-button-down" .disabled=${downDisabled} @click=${()=> this.doOnclick(entityId, "down")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-down"></ha-icon></ha-icon-button>
+            <ha-icon-button label="${this.hass.localize('ui.card.cover.open_cover')}" class="sc-shutter-button sc-shutter-button-up" .disabled=${disabledGlobaly || upDisabled} @click=${()=> this.doOnclick(entityId, "up")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-up"></ha-icon></ha-icon-button>
+            <ha-icon-button label="${this.hass.localize('ui.card.cover.stop_cover')}" class="sc-shutter-button sc-shutter-button-stop" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "stop")}><ha-icon class="sc-shutter-ha-icon" icon="mdi:stop"></ha-icon></ha-icon-button>
+            <ha-icon-button label="${this.hass.localize('ui.card.cover.close_cover')}" class="sc-shutter-button sc-shutter-button-down" .disabled=${disabledGlobaly || downDisabled} @click=${()=> this.doOnclick(entityId, "down")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-down"></ha-icon></ha-icon-button>
           </div>
           <div class="sc-shutter-selector">
             <div class="sc-shutter-selector-picture" style="width: ${width}px">
@@ -193,22 +195,22 @@ class Shutter extends LitElement {
           </div>
           <div style="${partialOpenButtonsDisplayed ? 'flex-flow: column wrap;' : 'display:none;'}" >
             <div class="sc-shutter-buttons" style="flex-flow: row wrap;">
-              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${upDisabled} @click=${()=> this.doOnclick(entityId, "partial", 100)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4Z"></ha-icon-button>
-              <ha-icon-button label="Partially close" class="sc-shutter-button" @click=${()=> this.doOnclick(entityId, "partial", 75)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9Z"></ha-icon-button>
-              <ha-icon-button label="Partially close" class="sc-shutter-button" @click=${()=> this.doOnclick(entityId, "partial", 50)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly || upDisabled} @click=${()=> this.doOnclick(entityId, "partial", 100)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "partial", 75)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "partial", 50)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12Z"></ha-icon-button>
             </div>
             <div class="sc-shutter-buttons" style="flex-flow: row wrap;">
-              <ha-icon-button label="Partially close" class="sc-shutter-button" @click=${()=> this.doOnclick(entityId, "partial", 25)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15Z"></ha-icon-button>
-              <ha-icon-button label="Partially close" class="sc-shutter-button" @click=${()=> this.doOnclick(entityId, "partial", 10)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z"></ha-icon-button>
-              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${downDisabled} @click=${()=> this.doOnclick(entityId, "partial", 0)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V20H8V18Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "partial", 25)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "partial", 10)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z"></ha-icon-button>
+              <ha-icon-button label="Partially close" class="sc-shutter-button" .disabled=${disabledGlobaly || downDisabled} @click=${()=> this.doOnclick(entityId, "partial", 0)} path="M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V20H8V18Z"></ha-icon-button>
             </div>
           </div>
         </div>
         <div class="sc-shutter-bottom" style="display: ${titlePosition != 'bottom' ? 'none' : 'block'}" >
-          <div class="sc-shutter-label" @click="${() => this.doDetailOpen(entityId)}">
+          <div class="sc-shutter-label ${disabledGlobaly ? 'sc-shutter-label-disabled' : ''}" @click="${() => this.doDetailOpen(entityId)}">
             ${friendlyName}
           </div>
-          <div class="sc-shutter-position">
+          <div class="sc-shutter-position ${disabledGlobaly ? 'sc-shutter-label-disabled' : ''}">
             ${positionText}
           </div>
         </div>
@@ -337,6 +339,7 @@ class Shutter extends LitElement {
       .sc-shutter-top { text-align: center; margin-bottom: 0.5rem; }
       .sc-shutter-bottom { text-align: center; margin-top: 0.5rem; }
       .sc-shutter-label { display: inline-block; font-size: 20px; vertical-align: middle; cursor: pointer;}
+      .sc-shutter-label-disabled { color: var(--secondary-text-color); }
       .sc-shutter-position { display: inline-block; vertical-align: middle; padding: 0 6px; margin-left: 1rem; border-radius: 2px; background-color: var(--secondary-background-color); }
     `;
   }
@@ -366,13 +369,16 @@ class Shutter extends LitElement {
   positionPercentToText(percent, inverted, alwaysPercentage) {
     if (!alwaysPercentage) {
       if (percent == 100) {
-        return this.hass.localize(inverted?'ui.components.logbook.messages.was_closed':'ui.components.logbook.messages.was_opened');
-      }
-      else if (percent == 0) {
-        return this.hass.localize(inverted?'ui.components.logbook.messages.was_opened':'ui.components.logbook.messages.was_closed');
+        return this.hass.localize(inverted?'component.cover.entity_component._.state.closed':'component.cover.entity_component._.state.open');
+      } else if (percent == 0) {
+        return this.hass.localize(inverted?'component.cover.entity_component._.state.open':'component.cover.entity_component._.state.closed');
       }
     }
-    return percent + ' %';
+    if (percent) {
+      return percent + ' %';
+    } else {
+      return this.hass.localize('state.default.unavailable');
+    }
   }
 
   calculatePositionFromPercent(percent, inverted, offset) {
