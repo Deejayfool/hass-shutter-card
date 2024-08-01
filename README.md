@@ -3,13 +3,18 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 [![buymeacoffee_badge](https://img.shields.io/badge/Donate-Buymeacoffee-orange?style=for-the-badge)](https://www.buymeacoffee.com/Deejayfool)
 
-**Note : Be careful, since version 2021.11.0 of Home Assistant, there is a breaking change in the icon buttons. So install v1.3.0 of this card only if you have at least the version 2021.11.0 of Home Assistant**
-
 This card allows to open, close or set a shutter to the opening rate you want.
+It has various options to customize buttons and behaviour. You can fine tune the card through the graphic editor.
 
 ![Shutter card](./images/shutter-card.gif)
 
-## Configuration
+## Graphic Editor Configuration
+
+![Shutter card editor](./images/shutter-card-editor.png)
+
+## Yaml Configuration
+
+To configure the card directly through yaml, you can use the following parameters :
 
 ### General
 
@@ -54,7 +59,7 @@ entities:
 
 If you use HACS, the resources will automatically be configured with the needed file.
 
-If you don't use HACS, you can download js file from [latest releases](https://github.com/Deejayfool/hass-shutter-card/releases). Drop it then in `www` folder in your `config` directory. Next add the following entry in lovelace configuration:
+If you don't use HACS, you can download js files from [latest releases](https://github.com/Deejayfool/hass-shutter-card/releases). Drop it then in `www` folder in your `config` directory. Next add the following entry in lovelace configuration:
 
 ```yaml
 resources:

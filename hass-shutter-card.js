@@ -50,6 +50,27 @@ class ShutterCard extends LitElement {
   getCardSize() {
     return this.config.entities.length + 1;
   }
+
+  //Card editor definition.
+  static async getConfigElement() {
+    await import("./hass-shutter-card-editor.js");
+    return document.createElement("shutter-card-editor");
+  }
+
+  //Default config for preview
+  static getStubConfig(hass, unusedEntities, allEntities) {
+    //Search for a cover entity unused first then in all entities.
+    let entity = unusedEntities.find((eid) => eid.split(".")[0] === "cover");
+    if (!entity) {
+      entity = allEntities.find((eid) => eid.split(".")[0] === "cover");
+    }
+    return {
+      "entities": [{
+        "entity": entity,
+        "name": "My Shutter"
+      }]
+    };
+  }
 }
 
 class Shutter extends LitElement {
@@ -432,3 +453,13 @@ class Shutter extends LitElement {
 
 customElements.define("sc-shutter", Shutter);
 customElements.define("shutter-card", ShutterCard);
+
+// Editor
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "shutter-card",
+  name: "Shutter Card",
+  preview: true,
+  description: "A shutter card for easy control of shutters",
+  documentationURL: "https://github.com/Deejayfool/hass-shutter-card",
+});
