@@ -39,6 +39,7 @@ To configure the card directly through yaml, you can use the following parameter
 | shutter_width_px | int | False | `153` | Set shutter visualization width in px. You can make it thicker or narrower to fit your layout.
 | disable_end_buttons | boolean | False | `false` | If set to `true`, the end states (opened/closed) will also deactivate the buttons for that direction (i.e. the "up" button will be disabled when the shutters are fully open)
 | partial_open_buttons_displayed | boolean | False | `false` | If set to `true`, the buttons for partial open positions (0%, 25%, 50%, 75%, 90% and 100%) are displayed
+| disable_standard_buttons | boolean | False | `false` | If set to `true`, the standard buttons for open/close/stop are not displayed
 
 _Remark : you can also just give the entity ID (without to specify `entity:`) if you don't need to specify the other configurations._
 

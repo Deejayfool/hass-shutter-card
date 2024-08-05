@@ -251,6 +251,10 @@ class ShutterCardSubElementEditor extends LitElement {
   get _partialOpenButtonsDisplayed() {
     return this.config['partial_open_buttons_displayed'];
   }
+
+  get _disableStandardButtons() {
+    return this.config['disable_standard_buttons'];
+  }
   
   render() {
     return html`
@@ -301,6 +305,16 @@ class ShutterCardSubElementEditor extends LitElement {
         </div>
         <div class="row">
           <ha-formfield
+                id="disable-standard_buttons"
+                label="Disable buttons ?"
+              >
+                <ha-switch
+                  .checked=${this._disableStandardButtons}
+                  @change=${this._disableStandardButtonsChanged}
+                >
+                </ha-switch>
+          </ha-formfield>
+          <ha-formfield
                 id="disable-end-buttons"
                 label="Disable end buttons ?"
               >
@@ -311,6 +325,9 @@ class ShutterCardSubElementEditor extends LitElement {
                 </ha-switch>
           </ha-formfield>
         </div>
+        <simple-tooltip animation-delay="0" for="disable-standard-buttons">
+            If 'true', the open, stop and down buttons are not displayed
+        </simple-tooltip>
         <simple-tooltip animation-delay="0" for="disable-end-buttons">
             If 'true', the end states (opened/closed) will also deactivate the buttons for that direction (i.e. the 'up' button will be disabled when the shutters are fully open)
         </simple-tooltip>
@@ -470,6 +487,10 @@ class ShutterCardSubElementEditor extends LitElement {
 
   _partialOpenButtonsDisplayedChanged(ev) {
     this._fireEventConfigChange("partial_open_buttons_displayed", ev.target.checked);
+  }
+
+  _disableStandardButtonsChanged(ev) {
+    this._fireEventConfigChange("disable_standard_buttons", ev.target.checked);
   }
 
   static get styles() {

@@ -143,6 +143,8 @@ class Shutter extends LitElement {
     
     let width = this.config.shutter_width_px ? Math.max(10, this.config.shutter_width_px) : 153;
 
+    let disableStandardButtons = this.config.disable_standard_buttons ? this.config.disable_standard_buttons : false;
+
     let disableEnd = this.config.disable_end_buttons ? this.config.disable_end_buttons : false;
     let alwaysPercentage = this.config.always_percentage ? this.config.always_percentage : false;
     
@@ -197,9 +199,11 @@ class Shutter extends LitElement {
                       </ha-icon-button>` : ''}
           </div>
           <div class="sc-shutter-buttons" style="flex-flow: ${buttonsInRow ? 'row': 'column'} wrap;">
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.open_cover')}" class="sc-shutter-button sc-shutter-button-up" .disabled=${disabledGlobaly || upDisabled} @click=${()=> this.doOnclick(entityId, "up")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-up"></ha-icon></ha-icon-button>
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.stop_cover')}" class="sc-shutter-button sc-shutter-button-stop" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "stop")}><ha-icon class="sc-shutter-ha-icon" icon="mdi:stop"></ha-icon></ha-icon-button>
-            <ha-icon-button label="${this.hass.localize('ui.card.cover.close_cover')}" class="sc-shutter-button sc-shutter-button-down" .disabled=${disabledGlobaly || downDisabled} @click=${()=> this.doOnclick(entityId, "down")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-down"></ha-icon></ha-icon-button>
+            ${!disableStandardButtons ? html`
+              <ha-icon-button label="${this.hass.localize('ui.card.cover.open_cover')}" class="sc-shutter-button sc-shutter-button-up" .disabled=${disabledGlobaly || upDisabled} @click=${()=> this.doOnclick(entityId, "up")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-up"></ha-icon></ha-icon-button>
+              <ha-icon-button label="${this.hass.localize('ui.card.cover.stop_cover')}" class="sc-shutter-button sc-shutter-button-stop" .disabled=${disabledGlobaly} @click=${()=> this.doOnclick(entityId, "stop")}><ha-icon class="sc-shutter-ha-icon" icon="mdi:stop"></ha-icon></ha-icon-button>
+              <ha-icon-button label="${this.hass.localize('ui.card.cover.close_cover')}" class="sc-shutter-button sc-shutter-button-down" .disabled=${disabledGlobaly || downDisabled} @click=${()=> this.doOnclick(entityId, "down")} ><ha-icon class="sc-shutter-ha-icon" icon="mdi:arrow-down"></ha-icon></ha-icon-button>
+            ` : ''}
           </div>
           <div class="sc-shutter-selector">
             <div class="sc-shutter-selector-picture" style="width: ${width}px">
