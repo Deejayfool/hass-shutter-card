@@ -209,7 +209,7 @@ class ShutterCardSubElementEditor extends LitElement {
   }
 
   get _name() {
-    return this.config['name'];
+    return this.config['name'] || '';
   }
   
   get _buttonsPosition() {
