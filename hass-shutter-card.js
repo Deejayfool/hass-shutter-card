@@ -467,3 +467,8 @@ window.customCards.push({
   description: "A shutter card for easy control of shutters",
   documentationURL: "https://github.com/Deejayfool/hass-shutter-card",
 });
+
+console.info(
+  '%c HASS-SHUTTER-CARD ',
+  'color: white; background: blue; font-weight: 700',
+);
