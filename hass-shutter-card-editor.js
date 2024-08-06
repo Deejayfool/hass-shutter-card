@@ -1,3 +1,5 @@
+import { localize } from './localize.js';
+
 const LitElement = customElements.get("hui-masonry-view")
   ? Object.getPrototypeOf(customElements.get("hui-masonry-view"))
   : Object.getPrototypeOf(customElements.get("hui-view"));
@@ -66,7 +68,7 @@ class ShutterCardEditor extends LitElement {
     return html`
     <div class="card-config">
       <ha-textfield
-        label="Titre (Optionel)"
+        .label=${localize("hcs.editor.title", this.hass.locale)}
         .hass=${this.hass}
         .value=${this._title}
         .configValue=${'title'}
@@ -272,41 +274,41 @@ class ShutterCardSubElementEditor extends LitElement {
       <div class="content">
         <div class="row">
           <ha-textfield 
-            label="Name" 
+            .label=${localize("hcs.editor.name", this.hass.locale)}
             .value=${this._name} 
             @change=${this._handleNameChanged}>
           </ha-textfield>
         </div>
         <div class="row">
           <ha-select
-            label="Buttons position"
+            .label=${localize("hcs.editor.buttons_position", this.hass.locale)}
             .value=${this._buttonsPosition}
             @selected=${this._buttonsPositionSelected}
             @closed=${this._stopPropagation}
             fixedMenuPosition
             naturalMenuWidth
             >
-            <ha-list-item value="left">left</ha-list-item>
-            <ha-list-item value="right">right</ha-list-item>
-            <ha-list-item value="top">top</ha-list-item>
-            <ha-list-item value="bottom">bottom</ha-list-item>
+            <ha-list-item value="left">${localize("hcs.editor.position.left", this.hass.locale)}</ha-list-item>
+            <ha-list-item value="right">${localize("hcs.editor.position.right", this.hass.locale)}</ha-list-item>
+            <ha-list-item value="top">${localize("hcs.editor.position.top", this.hass.locale)}</ha-list-item>
+            <ha-list-item value="bottom">${localize("hcs.editor.position.bottom", this.hass.locale)}</ha-list-item>
           </ha-select>
           <ha-select
-            label="Title position"
+            .label=${localize("hcs.editor.title_position", this.hass.locale)}
             .value=${this._titlePosition}
             @selected=${this._titlePositionSelected}
             @closed=${this._stopPropagation}
             fixedMenuPosition
             naturalMenuWidth
             >
-            <ha-list-item value="top">top</ha-list-item>
-            <ha-list-item value="bottom">bottom</ha-list-item>
+            <ha-list-item value="top">${localize("hcs.editor.position.top", this.hass.locale)}</ha-list-item>
+            <ha-list-item value="bottom">${localize("hcs.editor.position.bottom", this.hass.locale)}</ha-list-item>
           </ha-select>
         </div>
         <div class="row">
           <ha-formfield
-                id="disable-standard_buttons"
-                label="Disable buttons ?"
+                id="disable-standard-buttons"
+                .label=${localize("hcs.editor.disable_standard_buttons", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._disableStandardButtons}
@@ -316,7 +318,7 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
           <ha-formfield
                 id="disable-end-buttons"
-                label="Disable end buttons ?"
+                .label=${localize("hcs.editor.disable_end_buttons", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._disableEndButtons}
@@ -326,14 +328,14 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
         </div>
         <simple-tooltip animation-delay="0" for="disable-standard-buttons">
-            If 'true', the open, stop and down buttons are not displayed
+          ${localize("hcs.editor.tooltip.disable_standard_buttons", this.hass.locale)}
         </simple-tooltip>
         <simple-tooltip animation-delay="0" for="disable-end-buttons">
-            If 'true', the end states (opened/closed) will also deactivate the buttons for that direction (i.e. the 'up' button will be disabled when the shutters are fully open)
+          ${localize("hcs.editor.tooltip.disable_end_buttons", this.hass.locale)}
         </simple-tooltip>
         <div class="row">
           <ha-formfield
-                label="Partial open buttons displayed ?"
+                .label=${localize("hcs.editor.partial_open_buttons_displayed", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._partialOpenButtonsDisplayed}
@@ -343,7 +345,7 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
           <ha-formfield
                 id="inverted-shutter"
-                label="Inverted shutter ?"
+                .label=${localize("hcs.editor.inverted_shutter", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._invertPercentage}
@@ -353,12 +355,12 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
         </div>
         <simple-tooltip animation-delay="0" for="inverted-shutter">
-            For reversed buttons : set it to 'true' if your shutter is 100% when it is closed, and 0% when it is opened
+          ${localize("hcs.editor.tooltip.inverted_shutter", this.hass.locale)}
         </simple-tooltip>
         <div class="row">
           <ha-formfield
                 id="always-percentage"
-                label="Always percentage ?"
+                .label=${localize("hcs.editor.always_percentage", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._alwaysPercentage}
@@ -367,7 +369,7 @@ class ShutterCardSubElementEditor extends LitElement {
                 </ha-switch>
           </ha-formfield>
           <ha-formfield
-                label="Can Tilt ?"
+                .label=${localize("hcs.editor.can_tilt", this.hass.locale)}
               >
                 <ha-switch
                   .checked=${this._canTilt}
@@ -377,12 +379,12 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
         </div>
         <simple-tooltip animation-delay="0" for="always-percentage">
-            If set to 'true', the end states (opened/closed) will be also as numbers (0 / 100 % ) instead of a text
+          ${localize("hcs.editor.tooltip.always_percentage", this.hass.locale)}
         </simple-tooltip>
         <div class="row">
           <ha-textfield 
             id="partial-close-percentage"
-            label="Partial close percentage"
+            .label=${localize("hcs.editor.partial_close_percentage", this.hass.locale)}
             pattern="[0-9]+"
             step=1
             min=0
@@ -395,7 +397,7 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-textfield>
           <ha-textfield 
             id="offset-closed-percentage"
-            label="Offset closed percentage"
+            .label=${localize("hcs.editor.offset_closed_percentage", this.hass.locale)}
             pattern="[0-9]+"
             step=1
             min=0
@@ -408,14 +410,14 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-textfield>
         </div>
         <simple-tooltip animation-delay="0" for="partial-close-percentage">
-          Set it to a percentage (0-100) if you want to be able to quickly go to this "partially closed" state using a button.
+          ${localize("hcs.editor.tooltip.partial_close_percentage", this.hass.locale)}
         </simple-tooltip>
         <simple-tooltip animation-delay="0" for="offset-closed-percentage">
-          Set it to a percentage of travel that will still be considered a 'closed' state in the visualization.
+          ${localize("hcs.editor.tooltip.offset_closed_percentage", this.hass.locale)}
         </simple-tooltip>
         <div class="row">
           <ha-textfield 
-            label="Shutter width"
+            .label=${localize("hcs.editor.shutter_width", this.hass.locale)}
             pattern="[0-9]+"
             step=1
             min=50
