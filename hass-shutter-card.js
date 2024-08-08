@@ -10,7 +10,7 @@ class ShutterCard extends LitElement {
   static get properties() {
     return {
       hass: {},
-      _config: {state: true},
+      _config: {},
     };
   }
 
@@ -54,7 +54,7 @@ class ShutterCard extends LitElement {
   //Card editor definition.
   static async getConfigElement() {
     await import("./hass-shutter-card-editor.js");
-    return document.createElement("shutter-card-editor");
+    return document.createElement("hass-shutter-card-editor");
   }
 
   //Default config for preview

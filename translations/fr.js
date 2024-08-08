@@ -12,7 +12,7 @@ export const values = {
             "always_percentage": "Toujours afficher un pourcentage ?",
             "can_tilt": "Tilt possible ?",
             "partial_close_percentage": "Fermeture partielle (%)",
-            "offset_closed_percentage": "Offset fermé (%)",
+            "offset_closed_percentage": "Offset volet fermé (%)",
             "shutter_width": "Largeur de l'image en px",
             
             "tooltip": {

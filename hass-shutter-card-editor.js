@@ -33,14 +33,14 @@ class ShutterCardEditor extends LitElement {
   static get properties() {
     return {
       hass: {},
-      _config: { state: true },
+      _config: { },
       _configEntities: { state: true },
       _subElementEditorConfig: { state: true },
     }
   }
 
   setConfig(config) {
-    this._config = config;
+    this._config = { ...config};
     this._configEntities = this.processEditorEntities(config.entities);
   }
 
@@ -55,13 +55,13 @@ class ShutterCardEditor extends LitElement {
 
     if (this._subElementEditorConfig) {
       return html`
-        <shutter-card-sub-element-editor
+        <hass-shutter-card-sub-element-editor
           .hass=${this.hass}
           .config=${this._subElementEditorConfig.elementConfig}
           @go-back=${this._goBack}
           @config-changed=${this._handleSubElementChanged}
         >
-        </shutter-card-sub-element-editor>
+        </hass-shutter-card-sub-element-editor>
       `;
     }
 
@@ -512,8 +512,12 @@ class ShutterCardSubElementEditor extends LitElement {
         justify-content: space-between;
         margin-bottom: 5px;
       }
+      .row ha-select, .row ha-textfield {
+        width: 50%;
+      }
       .row ha-formfield {
         margin: 10px 0;
+        width: 50%;
       }
       .sc-editor-shutter-width,
       .sc-editor-offset-closed-percentage,
@@ -524,5 +528,5 @@ class ShutterCardSubElementEditor extends LitElement {
   }
 }
 
-customElements.define("shutter-card-sub-element-editor", ShutterCardSubElementEditor)
-customElements.define("shutter-card-editor", ShutterCardEditor);
+customElements.define("hass-shutter-card-sub-element-editor", ShutterCardSubElementEditor)
+customElements.define("hass-shutter-card-editor", ShutterCardEditor);
