@@ -1,6 +1,6 @@
 //Not in json because browsers do not support it natively for now : cf https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Statements/import
-let en = await import("./translations/en.js");
-let fr = await import("./translations/fr.js");
+let en = await import("./en.js");
+let fr = await import("./fr.js");
 
 const languages = {
   en: en,
