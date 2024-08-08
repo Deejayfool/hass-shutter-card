@@ -1,4 +1,4 @@
-import { localize } from './localize.js';
+import { localize } from "./localize.js";
 
 const LitElement = customElements.get("hui-masonry-view")
   ? Object.getPrototypeOf(customElements.get("hui-masonry-view"))
