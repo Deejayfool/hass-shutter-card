@@ -2,6 +2,7 @@ export const values = {
     "hcs": {
         "editor": {
             "title": "Titre (optionnel)",
+            "entity": "Entité :",
             "name": "Nom (optionnel)",
             "buttons_position": "Position des boutons",
             "title_position": "Position du titre",

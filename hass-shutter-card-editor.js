@@ -210,6 +210,10 @@ class ShutterCardSubElementEditor extends LitElement {
     }
   }
 
+  get _entity() {
+    return this.config['entity'];
+  }
+
   get _name() {
     return this.config['name'] || '';
   }
@@ -273,10 +277,14 @@ class ShutterCardSubElementEditor extends LitElement {
       </div>
       <div class="content">
         <div class="row">
+          <span class="entity-title">${localize("hcs.editor.entity", this.hass.locale)} ${this._entity}</span>
+        </div>
+        <div class="row">
           <ha-textfield 
             .label=${localize("hcs.editor.name", this.hass.locale)}
             .value=${this._name} 
-            @change=${this._handleNameChanged}>
+            @change=${this._handleNameChanged}
+            class="fullw">
           </ha-textfield>
         </div>
         <div class="row">
@@ -287,6 +295,7 @@ class ShutterCardSubElementEditor extends LitElement {
             @closed=${this._stopPropagation}
             fixedMenuPosition
             naturalMenuWidth
+            class="halfw"
             >
             <ha-list-item value="left">${localize("hcs.editor.position.left", this.hass.locale)}</ha-list-item>
             <ha-list-item value="right">${localize("hcs.editor.position.right", this.hass.locale)}</ha-list-item>
@@ -300,6 +309,7 @@ class ShutterCardSubElementEditor extends LitElement {
             @closed=${this._stopPropagation}
             fixedMenuPosition
             naturalMenuWidth
+            class="halfw"
             >
             <ha-list-item value="top">${localize("hcs.editor.position.top", this.hass.locale)}</ha-list-item>
             <ha-list-item value="bottom">${localize("hcs.editor.position.bottom", this.hass.locale)}</ha-list-item>
@@ -309,6 +319,7 @@ class ShutterCardSubElementEditor extends LitElement {
           <ha-formfield
                 id="disable-standard-buttons"
                 .label=${localize("hcs.editor.disable_standard_buttons", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._disableStandardButtons}
@@ -319,6 +330,7 @@ class ShutterCardSubElementEditor extends LitElement {
           <ha-formfield
                 id="disable-end-buttons"
                 .label=${localize("hcs.editor.disable_end_buttons", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._disableEndButtons}
@@ -336,6 +348,7 @@ class ShutterCardSubElementEditor extends LitElement {
         <div class="row">
           <ha-formfield
                 .label=${localize("hcs.editor.partial_open_buttons_displayed", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._partialOpenButtonsDisplayed}
@@ -346,6 +359,7 @@ class ShutterCardSubElementEditor extends LitElement {
           <ha-formfield
                 id="inverted-shutter"
                 .label=${localize("hcs.editor.inverted_shutter", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._invertPercentage}
@@ -361,6 +375,7 @@ class ShutterCardSubElementEditor extends LitElement {
           <ha-formfield
                 id="always-percentage"
                 .label=${localize("hcs.editor.always_percentage", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._alwaysPercentage}
@@ -370,6 +385,7 @@ class ShutterCardSubElementEditor extends LitElement {
           </ha-formfield>
           <ha-formfield
                 .label=${localize("hcs.editor.can_tilt", this.hass.locale)}
+                class="halfw"
               >
                 <ha-switch
                   .checked=${this._canTilt}
@@ -393,7 +409,7 @@ class ShutterCardSubElementEditor extends LitElement {
             suffix="%"
             type="number"
             @change=${this._partialClosePercentageChanged}
-            class="sc-editor-partial-close-percentage">
+            class="halfw">
           </ha-textfield>
           <ha-textfield 
             id="offset-closed-percentage"
@@ -406,7 +422,7 @@ class ShutterCardSubElementEditor extends LitElement {
             suffix="%"
             type="number"
             @change=${this._offsetClosedPercentageChanged}
-            class="sc-editor-offset-closed-percentage">
+            class="halfw">
           </ha-textfield>
         </div>
         <simple-tooltip animation-delay="0" for="partial-close-percentage">
@@ -426,7 +442,7 @@ class ShutterCardSubElementEditor extends LitElement {
             suffix="px"
             type="number"
             @change=${this._shutterWidthPxChanged}
-            class="sc-editor-shutter-width">
+            class="fullw">
           </ha-textfield>
         </div>
       </div>
@@ -507,22 +523,27 @@ class ShutterCardSubElementEditor extends LitElement {
         align-items: center;
         font-size: 18px;
       }
+      .entity-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
       .row {
         display: flex;
         justify-content: space-between;
         margin-bottom: 5px;
       }
       .row ha-select, .row ha-textfield {
-        width: 50%;
+        margin: 0 2px;
       }
       .row ha-formfield {
-        margin: 10px 0;
+        margin: 10px 2px;
+      }
+      .halfw {
         width: 50%;
       }
-      .sc-editor-shutter-width,
-      .sc-editor-offset-closed-percentage,
-      .sc-editor-partial-close-percentage {
-        width: 150px;
+      .fullw {
+        width: 100%;
       }
     `;
   }
