@@ -48,7 +48,51 @@ class ShutterCard extends LitElement {
   // The height of your card. Home Assistant uses this to automatically
   // distribute all cards over the available columns.
   getCardSize() {
-    return this.config.entities.length + 1;
+    return this._config.entities.length + 1;
+  }
+
+  //Section layout : we compute the size of the card. cf : https://developers.home-assistant.io/docs/frontend/custom-ui/custom-card/#sizing-in-sections-view
+  getLayoutOptions() {
+    let nbRows = 4;
+    let nbCols = 3;
+    if (this._config && this._config.entities) {
+      nbRows = this._config.title ? 1.5 : 0;
+      let maxNbCols = 0;
+      this._config.entities.forEach(entity => {
+        nbCols = 0;
+        let verticalButtons = false;
+        entity.buttons_position == 'top' || entity.buttons_position == 'down' ? verticalButtons = true : verticalButtons = false;
+        let isDisableStandardButtons = entity.disable_standard_buttons ? entity.disable_standard_buttons : false;
+        let isTiltButtonsDisplayed = entity.can_tilt ? entity.can_tilt : false;
+        let isPartialButtonDisplayed = entity.partial_open_buttons_displayed ? entity.partial_open_buttons_displayed : false;
+        if (verticalButtons) {
+          //vertical layout for buttons
+          entity.shutter_width_px ? nbCols = nbCols + Math.round(entity.shutter_width_px / 80) : nbCols = nbCols + 2;
+          nbCols > maxNbCols ? maxNbCols = nbCols : null; // we keep the max number of cols for the section.
+          nbRows = nbRows + 3.2; // 1 for title and 2 for the image.
+          isDisableStandardButtons ? null : nbRows = nbRows + 1;
+          isTiltButtonsDisplayed ? nbRows = nbRows + 1 : null;
+          isPartialButtonDisplayed ? nbRows = nbRows + 2 : null;
+        } else {
+          //horizontal layout for buttons
+          entity.shutter_width_px ? nbCols = nbCols + Math.round(entity.shutter_width_px / 80) : nbCols = nbCols + 2;
+          isDisableStandardButtons ? null : nbCols = nbCols + 1;
+          isTiltButtonsDisplayed ? nbCols = nbCols + 1 : null;
+          isPartialButtonDisplayed ? nbCols = nbCols + 2 : null;
+          nbCols > maxNbCols ? maxNbCols = nbCols : null; // we keep the max number of cols for the section.
+          nbRows = nbRows + 3.2;
+        }
+      });
+      nbRows = Math.ceil(nbRows);
+      nbCols = Math.ceil(maxNbCols);
+    }
+    //console.log("Section sizing computed. nbRows : " + nbRows + " nbCols : " + nbCols);
+    return {
+      "grid_rows": nbRows,
+      "grid_min_rows": nbRows,
+      "grid_columns": nbCols,
+      "grid_min_columns": nbCols,
+    };
   }
 
   //Card editor definition.
