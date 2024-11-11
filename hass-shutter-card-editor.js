@@ -50,7 +50,7 @@ class ShutterCardEditor extends LitElement {
  
   render() {
     if (!this.hass || !this._config) {
-      return nothing;
+      return html``;
     }
 
     if (this._subElementEditorConfig) {
