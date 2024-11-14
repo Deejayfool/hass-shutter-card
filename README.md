@@ -1,3 +1,9 @@
+```diff
+- I'm not maintaining this repo anymore because I've no personal time to work on it.
+- You can look at this excellent repo which does the same... in better 😋 :
+- https://github.com/marcelhoogantink/enhanced-shutter-card
+```
+
 # Shutter card
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
