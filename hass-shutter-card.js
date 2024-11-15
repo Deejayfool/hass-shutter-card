@@ -310,7 +310,7 @@ class ShutterCard extends HTMLElement {
           let positionText;
           if (invertPercentage) {
             visiblePosition = offset?Math.min(100, Math.round(currentPosition / offset * 100 )):currentPosition;
-            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass, this.config.text_opened, this.config.text_closed);
             if (disableEnd) {
               _this.changeButtonState(shutter, currentPosition, invertPercentage);
             }
@@ -320,7 +320,7 @@ class ShutterCard extends HTMLElement {
           }
           else  {
             visiblePosition = offset?Math.max(0, Math.round((currentPosition - offset) / (100-offset) * 100 )):currentPosition;
-            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass);
+            positionText = _this.positionPercentToText(visiblePosition, invertPercentage, alwaysPercentage, hass, this.config.text_opened, this.config.text_closed);
             if (disableEnd) {
               _this.changeButtonState(shutter, currentPosition, invertPercentage);
             }
@@ -368,12 +368,18 @@ class ShutterCard extends HTMLElement {
     }
   }
 
-  positionPercentToText(percent, inverted, alwaysPercentage, hass) {
+  positionPercentToText(percent, inverted, alwaysPercentage, hass, text_opened, text_closed) {
     if (!alwaysPercentage) {
       if (percent == 100) {
+        if (text_opened) {
+          return text_opened;
+        }
         return hass.localize(inverted?'ui.components.logbook.messages.was_closed':'ui.components.logbook.messages.was_opened');
       }
       else if (percent == 0) {
+        if (text_closed) {
+          return text_closed;
+        }
         return hass.localize(inverted?'ui.components.logbook.messages.was_opened':'ui.components.logbook.messages.was_closed');
       }
     }
